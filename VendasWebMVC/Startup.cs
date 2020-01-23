@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using VendasWebMVC.Models;
 using VendasWebMVC.Data;
+using VendasWebMVC.Services;
 
 namespace VendasWebMVC
 {
@@ -42,6 +43,7 @@ namespace VendasWebMVC
 
 			//Colocando a classe seedingservice para preencher os dados automáticamente
 			services.AddScoped<Seedingservice>();
+			services.AddScoped<ServicoVendedor>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
