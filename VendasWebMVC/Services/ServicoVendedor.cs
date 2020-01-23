@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VendasWebMVC.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace VendasWebMVC.Services
 {
@@ -28,7 +29,7 @@ namespace VendasWebMVC.Services
 
 		public Vendedor AcharPorId(int id)
 		{
-			return _context.Vendedor.FirstOrDefault(obj => obj.Id == id);
+			return _context.Vendedor.Include(obj => obj.Departamento).FirstOrDefault(obj => obj.Id == id);
 		}
 
 		public void Remover(int id)
