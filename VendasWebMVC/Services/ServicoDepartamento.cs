@@ -6,25 +6,18 @@ using VendasWebMVC.Models;
 
 namespace VendasWebMVC.Services
 {
-	public class ServicoVendedor
+	public class ServicoDepartamento
 	{
 		private readonly VendasWebMVCContext _context;
 
-		public ServicoVendedor (VendasWebMVCContext context)
+		public ServicoDepartamento(VendasWebMVCContext context)
 		{
 			_context = context;
 		}
 
-		public List<Vendedor> AcharTodos()
+		public List<Departamento> AcharTodos()
 		{
-			return _context.Vendedor.ToList();
+			return _context.Departamento.OrderBy(x => x.Nome).ToList();
 		}
-
-		public void Inserir(Vendedor obj)
-		{
-			_context.Add(obj);
-			_context.SaveChanges();
-		}
-
 	}
 }

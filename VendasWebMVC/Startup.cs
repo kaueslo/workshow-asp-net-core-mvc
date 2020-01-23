@@ -44,6 +44,7 @@ namespace VendasWebMVC
 			//Colocando a classe seedingservice para preencher os dados automáticamente
 			services.AddScoped<Seedingservice>();
 			services.AddScoped<ServicoVendedor>();
+			services.AddScoped<ServicoDepartamento>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
