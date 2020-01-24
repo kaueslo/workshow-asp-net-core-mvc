@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -53,13 +54,13 @@ namespace VendasWebMVC.Controllers
 		{
 			if(id == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
 			var obj = _vendedorServico.AcharPorId(id.Value);
 			if(obj == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
 			}
 
 			return View(obj);
@@ -77,13 +78,13 @@ namespace VendasWebMVC.Controllers
 		{
 			if (id == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
 			var obj = _vendedorServico.AcharPorId(id.Value);
 			if (obj == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
 			}
 
 			return View(obj);
@@ -93,14 +94,14 @@ namespace VendasWebMVC.Controllers
 		{
 			if (id == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
 			var obj = _vendedorServico.AcharPorId(id.Value);
 
 			if (obj == null)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
 			}
 
 			List<Departamento> departamentos = _servicoDepartamento.AcharTodos();
@@ -115,21 +116,28 @@ namespace VendasWebMVC.Controllers
 		{
 			if(id != vendedor.Id)
 			{
-				return BadRequest();
+				return RedirectToAction(nameof(Error), new { mensagem = "Id não corresponde" });
 			}
 			try
 			{ 
 				_vendedorServico.Atualizar(vendedor);
 				return RedirectToAction(nameof(Index));
 			}
-			catch (NotFoundException)
+			catch (ApplicationException e)
 			{
-				return NotFound();
+				return RedirectToAction(nameof(Error), new { mensagem =e.Message });
 			}
-			catch (DbConcurrencyException)
+
+		}
+
+		public IActionResult Error(string mensagem)
+		{
+			var viewModel = new ErrorViewModel
 			{
-				return BadRequest();
-			}
+				Mensagem = mensagem,
+				RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+			};
+			return View(viewModel);
 		}
 	}
 }
