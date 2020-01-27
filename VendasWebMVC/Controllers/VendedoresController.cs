@@ -28,42 +28,42 @@ namespace VendasWebMVC.Controllers
 
 
 		// GET: /<controller>/
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
 
-			var lista = _vendedorServico.AcharTodos();
+			var lista = await _vendedorServico.AcharTodosAsync();
 			return View(lista);
 		}
 
-		public IActionResult Criar()
+		public async Task<IActionResult> Criar()
 		{
-			var departamentos = _servicoDepartamento.AcharTodos();
+			var departamentos = await _servicoDepartamento.AcharTodosAsync();
 			var viewModel = new VendedorFormViewModel { Departamentos = departamentos };
 			return View(viewModel);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Criar(Vendedor vendedor)
+		public async Task<IActionResult> Criar(Vendedor vendedor)
 		{
 			if (!ModelState.IsValid)
 			{
-				var departamentos = _servicoDepartamento.AcharTodos();
+				var departamentos = await _servicoDepartamento.AcharTodosAsync();
 				var viewModel = new VendedorFormViewModel { Vendedor = vendedor, Departamentos = departamentos };
 				return View(viewModel);
 			}
-			_vendedorServico.Inserir(vendedor);
+			await _vendedorServico.InserirAsync(vendedor);
 			return RedirectToAction(nameof(Index));
 		}
 
-		public IActionResult Deletar(int? id)
+		public async Task<IActionResult> Deletar(int? id)
 		{
 			if(id == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
-			var obj = _vendedorServico.AcharPorId(id.Value);
+			var obj = await _vendedorServico.AcharPorIdAsync(id.Value);
 			if(obj == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
@@ -74,20 +74,20 @@ namespace VendasWebMVC.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Deletar(int id)
+		public async Task<IActionResult> Deletar(int id)
 		{
-			_vendedorServico.Remover(id);
+			await _vendedorServico.RemoverAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
 
-		public IActionResult Detalhes(int? id)
+		public async Task<IActionResult> Detalhes(int? id)
 		{
 			if (id == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
-			var obj = _vendedorServico.AcharPorId(id.Value);
+			var obj = await _vendedorServico.AcharPorIdAsync(id.Value);
 			if (obj == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
@@ -96,21 +96,21 @@ namespace VendasWebMVC.Controllers
 			return View(obj);
 		}
 
-		public IActionResult Editar(int? id)
+		public async Task<IActionResult> Editar(int? id)
 		{
 			if (id == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não fornecido" });
 			}
 
-			var obj = _vendedorServico.AcharPorId(id.Value);
+			var obj = await _vendedorServico.AcharPorIdAsync(id.Value);
 
 			if (obj == null)
 			{
 				return RedirectToAction(nameof(Error), new { mensagem = "Id não encontrado" });
 			}
 
-			List<Departamento> departamentos = _servicoDepartamento.AcharTodos();
+			List<Departamento> departamentos = await _servicoDepartamento.AcharTodosAsync();
 
 			VendedorFormViewModel viewModel = new VendedorFormViewModel { Vendedor = obj, Departamentos = departamentos };
 			return View(viewModel);
@@ -118,11 +118,11 @@ namespace VendasWebMVC.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Editar(int id, Vendedor vendedor)
+		public async Task<IActionResult> Editar(int id, Vendedor vendedor)
 		{
 			if (!ModelState.IsValid)
 			{
-				var departamentos = _servicoDepartamento.AcharTodos();
+				var departamentos = await  _servicoDepartamento.AcharTodosAsync();
 				var viewModel = new VendedorFormViewModel { Vendedor = vendedor, Departamentos = departamentos };
 				return View(viewModel);
 			}
@@ -133,7 +133,7 @@ namespace VendasWebMVC.Controllers
 			}
 			try
 			{ 
-				_vendedorServico.Atualizar(vendedor);
+				await _vendedorServico.AtualizarAsync(vendedor);
 				return RedirectToAction(nameof(Index));
 			}
 			catch (ApplicationException e)
