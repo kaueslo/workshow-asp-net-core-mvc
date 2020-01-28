@@ -11,7 +11,7 @@ namespace VendasWebMVC.Models
 		public int Id { get; set; }
 		public DateTime Data { get; set; }
 		public double Quantia { get; set; }
-		public statusVenda status { get; set; }
+		public statusVenda Status { get; set; }
 		public Vendedor Vendedor { get; set; }
 
 		public RegistroVendedor()
@@ -24,7 +24,7 @@ namespace VendasWebMVC.Models
 			Id = id;
 			Data = data;
 			Quantia = quantia;
-			this.status = status;
+			Status = status;
 			Vendedor = vendedor;
 		}
 	}
