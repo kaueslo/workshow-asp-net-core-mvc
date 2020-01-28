@@ -40,9 +40,22 @@ namespace VendasWebMVC.Controllers
 			return View(resultado);
 		}
 
-		public IActionResult BuscaAgrupada()
+		public async Task<IActionResult> BuscaAgrupada(DateTime? dtMin, DateTime? dtMax)
 		{
-			return View();
+			if (!dtMin.HasValue)
+			{
+				dtMin = new DateTime(DateTime.Now.Year, 1, 1);
+			}
+			if (!dtMax.HasValue)
+			{
+				dtMax = DateTime.Now;
+			}
+
+			ViewData["dtMin"] = dtMin.Value.ToString("yyyy-MM-dd");
+			ViewData["dtMax"] = dtMax.Value.ToString("yyyy-MM-dd");
+
+			var resultado = await _servicoRegistroVendas.AchePorDataAgrupadaAsync(dtMin, dtMax);
+			return View(resultado);
 		}
 	}
 }
